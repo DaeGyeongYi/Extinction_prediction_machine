@@ -5,11 +5,7 @@ from mlpckg.util_method import *
 
 def make_test(df_all,df_target,Year_Start:int, Year_end:int):
     Year_end += 1
-    df_all = dropdup(df_all)
-    df_all = remove_sp(df_all)
     df_all = latlontogps(df_all)
-    
-    df_target = dropdup(df_target)
     df_target = latlontogps(df_target)
     
 

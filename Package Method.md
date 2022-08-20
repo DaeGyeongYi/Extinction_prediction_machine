@@ -41,8 +41,6 @@ def custom_mulreg(olsarg:str,df,viewoption=False):
 
 olsarg는 연속으로 다중회귀를 진행할때 들어갈 변수이름이 반환됨
 
-
-
 olsarg : +로 이어지는 종들이름합쳐놓은것
 
 df 데이터프레임
@@ -79,8 +77,6 @@ df_target: 테스트파일을 만들고 싶은 종의 dataframe (여러종일경
 year_start : 테스트파일을 위한 조사를 어느년도부터 시작할 것인지
 
 year_end ; 테스트파일을 위한 조사를 어느년도에서 끝날 것인지
-
-
 
 df_target에, dataframe에 연도마다 주변 조사(반경 18km)결과를 종별로 컬럼을 생성해서 반환함
 
@@ -129,8 +125,6 @@ viewoption: 머신러닝 한번 돌때마다 결과를 볼것인지
 
 to_csv: csv파일로 지정된 경로로 저장할 것인지.
 
-
-
 return: 없음. 지정해둔 경로로 머신러닝 측정 기준을 담은 csv가 반환됨
 
 ```python
@@ -143,10 +137,7 @@ df_target: 지금 일반화 해보는 dataframe
 sourcelist : list형식으로 시민과학 데이터의 source를 입력해주면 됨
 
 
-
 return : 모델에 들어갈 train 데이터 test데이터 train 데이터의 타겟종 개수, test데이터의 타겟종 갯수
-
-
 
 ```python
 def timegen(df_target,sliceYear,target_species,option=0):
@@ -166,10 +157,6 @@ option:
 1 = > 과거 vs 현재
 
 return : 모델에 들어갈 train 데이터 test데이터 train 데이터의 타겟종 개수, test데이터의 타겟종 갯수
-
-
-
-
 
 ## 6. final_var_select
 
@@ -201,11 +188,7 @@ viewoption: 머신러닝 한번 돌때마다 결과를 볼것인지
 
 to_csv: csv파일로 지정된 경로로 저장할 것인지.
 
-
-
 return 샤프밸류가 높은 순서대로 returnsize로 설정한 순위까지 잘려서 종이름이 list로 반환됨
-
-
 
 ## 7. AOO
 
