@@ -7,28 +7,44 @@ def latlontogps(frame):
     return frame
 ```
 
- 데이터 프레임을 인자로 받아서 Latitude와 Longitude를 합친 튜플형태의 컬럼을 추가한 데이터 프레임을 반환함
+ 데이터 프레임의 Latitude와 Longitude열의 데이터를  (lat,lon)형태로 합친 'gps' 열을 생성합니다.
+
+`frame`: 함수의 인자로 들어갈 데이터 프레임
+
+`return`: 함수에 따라 처리된 데이터 프레임
 
 ```python
 def remove_sp(frame): 
     return frame
 ```
 
-데이터 프레임을 인자로 받아서 sp.으로 들어간 애들, 통계적으로 유의미한 수치 이하(30개)의 관측건수를 가진 애들, 속명만 기재된 애들을 제거한 데이터프레임을 반환함
+속명 까지만 기재되거나, sp.로 기재된 데이터, 총 관측건수가 30 이하인 종을 제거합니다.
+
+`frame`: 함수의 인자로 들어갈 데이터 프레임
+
+`return`: 함수에 따라 처리된 데이터 프레임
 
 ```python
 def dropdup(frame): 
     return frame
 ```
 
-데이터 프레임을 인자로 받아서 gps 오차가 1보다 큰 경우, 위경도가 제대로 기록되지 않은 경우를 제거하고 'Year','Species','Latitude','Longitude'를 기준으로 중복되는 관측건수를 drop한 데이터 프레임을 반환함
+gps 오차가 1000m보다 큰 데이터와 Latitude,Longitude가 제대로 기록되지 않은 데이터를 제거합니다.
+
+['Year','Species','Latitude','Longitude']를 기준으로 중복되는 데이터들을 한개만 남기고 나머지는 제거합니다.
+
+`frame`: 함수의 인자로 들어갈 데이터 프레임
+
+`return`: 함수에 따라 처리된 데이터 프레임
 
 ```python
 def select_key(num:int):
     return target_species,key
 ```
 
-csv 불러오고 저장하고 할때 귀찮아서 만든 코드. 확인 후 임의로 수정해가면서 쓰는 것이 편할 것.
+read_csv(), to_csv()를 편하게 이용하기 위해 생성한 함수입니다.
+
+코드를 바꿔가며 사용하거나 사용하지 않아도 무방합니다.
 
 ## 2. stat_method
 
@@ -37,31 +53,45 @@ def custom_mulreg(olsarg:str,df,viewoption=False):
     return res, olsarg
 ```
 
-다중회귀 분석을 진행하고 각 종들의 pvalues를 체크할수 있는 res를 반환
+다중선형회귀 분석을 진행합니다.
 
-olsarg는 연속으로 다중회귀를 진행할때 들어갈 변수이름이 반환됨
+`olsarg`: ols 함수에 인자로 들어갈, 종 이름을 '+'로 묶어놓은 string 타입의 변수
 
-olsarg : +로 이어지는 종들이름합쳐놓은것
+`df`:  ols 함수에 data로 들어갈 데이터프레임
 
-df 데이터프레임
+`viewoption`: TRUE로 설정하면 res.summary()를 확인할 수 있습니다.
 
-viewoption :TRUE면 진행된 후 결과를 볼 수 있음, FALSE면 안봄
+
+
+`res`: 각 종들의 pvalues를 체크하거나, 다중회귀분석의 결과를 확인하기 위해 사용합니다. ex) res.pvalues
+
+`olsarg`: 다중회귀분석을 여러번 시행할 때, 다음 다중회귀분석에 들어갈 변수들을 반환함.
 
 ```python
 def custom_linreg(df,target_species,viewoption=False):
     return Species_list
 ```
 
-단순회귀분석을 진행하고 PVALUE가 0.05이하인 종들을 리스트로 반환함
+단순선형회귀분석을 진행합니다.
 
-VIEWOPTION: 위오 동일
+`df`: 회귀분석을 진행할 변수들이 있는 데이터 프레임
+
+`target_species`: 종속변수가 될 종의 이름
+
+`viewoption`: TRUE로 설정하면 각 종마다의 회귀분석 결과를 확인할 수 있습니다.
 
 ```python
 def custom_vif_varlist(df,varlist:list):
     return featurelist
 ```
 
-다중공선성을 확인해서 10이하의 것들만 남겨놓은 LIST를 반환함
+다중 공선성을 확인하여 변수들을 선정합니다.
+
+`df`: 다중공선성을 확인하기 위한 변수들이 속한 데이터프레임
+
+`varlist`: 다중공선성을 확인할 변수들의 리스트
+
+`featurelist` 다중공선성이 10 이하인 변수들만을 남긴 리스트
 
 ## 3. make_test
 
@@ -70,15 +100,17 @@ def make_test(df_all,df_target,Year_Start:int, Year_end:int):
     return df_target
 ```
 
-df_all: 전체종이 들어있는 dataframe
+테스트용 데이터 프레임을 생성합니다.
 
-df_target: 테스트파일을 만들고 싶은 종의 dataframe (여러종일경우 한번에 하는것을 추천함.)
+`df_all`: 전처리가 완료된 모든 데이터 포인트가 기록된 데이터 프레임
 
-year_start : 테스트파일을 위한 조사를 어느년도부터 시작할 것인지
+`df_target`: 테스트파일을 만들 종의 dataframe (여러종일경우 한번에 하는것을 추천함.)
 
-year_end ; 테스트파일을 위한 조사를 어느년도에서 끝날 것인지
+`year_start`: 조사를 어느년도부터 시작할 것인지를 정하는 인자
 
-df_target에, dataframe에 연도마다 주변 조사(반경 18km)결과를 종별로 컬럼을 생성해서 반환함
+`year_end`: 조사를 어느년도에서 끝낼 것인지를 정하는 인자
+
+`return`:  테스트용 데이터 프레임이 반환됨
 
 ## 4. make_train
 
@@ -87,13 +119,15 @@ def make_train(df_all,df_target,target_species):
     return df_fin
 ```
 
-df_all : 전체종이 들어있는 데이터 프레임
+학습용 데이터 프레임을 생성합니다.
 
-df_target: train 데이터를 만들 종의 테스트 dataframe
+`df_all`: 전체종이 들어있는 데이터 프레임
 
-target_species: train 데이터를 만들 종의 이름
+`df_target`: 학습용 데이터를 만들 종의 테스트용 데이터 프레임
 
-return: 실제로 관측이 일어났던 연도의 주변 조사 데이터가 df_target에 붙어서 반환됨
+`target_species`: 학습용 데이터를 만들 종의 이름
+
+`df_fin`: 학습용 데이터 프레임이 반환됨
 
 ## 5. ML_method
 
@@ -103,60 +137,79 @@ def ML(df,targetnum,varlist,varlistname:str
        ,testsize=0.1,learningrate=0.7,viewoption=False,to_csv=False):
 ```
 
-df : 머신러닝 모델이 필요한 dataframe , 위의 make train 함수가 만든 dataframe을 활용하면됨
+머신러닝을 진행합니다.
 
-targetnum : 타겟종의 갯수
+`df`: 머신러닝 모델이 필요한 dataframe (학습용 데이터 프레임)
 
-varlist: 모델에 사용될 변수 종들의 목록 (list형식으로 넣어야함)
+`targetnum`: 타겟종의 갯수
 
-varlistname: csv로 결과를 반환하려고할때 사용된 varlist가 어떤건지 구분하기위함 임의로 지정할것
+`varlist`: 모델에 사용될 변수 종들의 list
 
-target_species: 내가 머신에 집어넣을 종 이름
+`varlistname`: csv로 결과를 반환하려고할때 사용된 varlist가 어떤건지 구분하기위함. 임의로 지정할것.
 
-bagnum : presence보다 absence가 많으므로 비율을 맞춰줘야하는데, absence를 일부분만 뽑게됨. 데이터의 편향이 있을 수 있으므로, 다른 absence도 뽑아보는 방식으로 결정됨. 여기서 이 백을 몇번을 뽑아볼 것인지 지정하는 것
+`target_species`: 모델에 들어갈 타겟 종의 이름
 
-repnum: 뽑아본 bag 안에서 몇번이나 머신러닝을 반복할 것인지
+`bagnum` : presence보다 absence가 많으므로 비율을 맞춰주기 위해서, absence를 일부분만 뽑게됨.
 
-testsize: 아는대로
+ 데이터의 편향이 있을 수 있으므로 다른 absence bag을 몇 번이나 뽑아볼 것인지 지정하는 인자
 
-learningrate: 아는대로
+`repnum`:  하나의 bag 안에서 몇번이나 머신러닝을 반복할 것인지 지정하는 인자
 
-viewoption: 머신러닝 한번 돌때마다 결과를 볼것인지
+`testsize`: 머신러닝 test size
 
-to_csv: csv파일로 지정된 경로로 저장할 것인지.
+`learningrate`: 머신러닝 learningrate
 
-return: 없음. 지정해둔 경로로 머신러닝 측정 기준을 담은 csv가 반환됨
+`viewoption`: TRUE이면 매 머신러닝마다 그 결과를 볼 수 있음
+
+`to_csv`: TRUE이면 머신러닝의 결과 값들을 지정된 경로에 csv로 저장함
+
+`return`: 없음.
 
 ```python
 def structgen(df_target,Sourcelist):
     return df_train, df_test,train_len,test_len
 ```
 
-df_target: 지금 일반화 해보는 dataframe
+시민과학 데이터와 구조적 데이터간의 비교를 위해 새로운 train, test set를 생성합니다.
 
-sourcelist : list형식으로 시민과학 데이터의 source를 입력해주면 됨
+`df_target`: 일반화를 위해 slice해야하는 dataframe
 
+`sourcelist`: 시민과학 데이터의 Source들을 list형식으로 입력받음
 
-return : 모델에 들어갈 train 데이터 test데이터 train 데이터의 타겟종 개수, test데이터의 타겟종 갯수
+`df_train`: 일반화 과정에서 모델에 들어갈 train 데이터 
+
+`df_test`: 일반화 과정에서 모델에 들어갈 test 데이터
+
+`train_len`:  train 데이터의 presence개수
+
+`test_len`:  test 데이터의 presence개수
 
 ```python
 def timegen(df_target,sliceYear,target_species,option=0):
     return df_train, df_test,train_len,test_len
 ```
 
-df_target: 지금 일반화해보는 dataframe
+시간 상의 비교를 위해 새로운 train, test set를 생성합니다.
 
-sliceYear: 어떤 년도로 자를것인지
+`df_target`: 일반화를 위해 slice해야하는 dataframe
 
-target_species: 타겟되는 종의 이름
+`sliceYear`: 어떤 년도로 자를것인지
 
-option:
+`target_species`: 현재 df_target의 presence로 설정된 종(타겟 종)
 
-0 =>\# 현재 vs 과거
+`option`:
 
-1 = > 과거 vs 현재
+0 =>과거의 년도를 기준으로 70퍼센트정도를 학습한 뒤, 현재의 30퍼센트를 테스트 해보는것
 
-return : 모델에 들어갈 train 데이터 test데이터 train 데이터의 타겟종 개수, test데이터의 타겟종 갯수
+1 = > 현재의 년도를 기준으로 70퍼센트정도를 학습한 뒤, 과거의 30퍼센트를 테스트 해보는것
+
+`df_train`: 일반화 과정에서 모델에 들어갈 train 데이터 
+
+`df_test`: 일반화 과정에서 모델에 들어갈 test 데이터
+
+`train_len`:  train 데이터의 presence개수
+
+`test_len`:  test 데이터의 presence개수
 
 ## 6. final_var_select
 
@@ -166,29 +219,31 @@ def final_var_select(df,targetnum,varlist,target_species
                      ,returnsize=15,viewoption=False,to_csv=False):
 ```
 
-df: 샤프 밸류 체크를 진행해볼 dataframe
+`df`: shap value를 확인해보려고하는 데이터프레임
 
-targetnum : 타겟종의 갯수
+`targetnum`: 타겟종의 갯수
 
-varlist: 모델에 사용될 변수 종들의 목록 (list형식으로 넣어야함)
+`varlist`: 모델에 사용될 변수 종들의 list
 
-target_species: 내가 머신에 집어넣을 종 이름
+`target_species`: 모델에 들어갈 타겟 종의 이름
 
-bagnum : presence보다 absence가 많으므로 비율을 맞춰줘야하는데, absence를 일부분만 뽑게됨. 데이터의 편향이 있을 수 있으므로, 다른 absence도 뽑아보는 방식으로 결정됨. 여기서 이 백을 몇번을 뽑아볼 것인지 지정하는 것
+`bagnum` : presence보다 absence가 많으므로 비율을 맞춰주기 위해서, absence를 일부분만 뽑게됨.
 
-repnum: 뽑아본 bag 안에서 몇번이나 머신러닝을 반복할 것인지
+ 데이터의 편향이 있을 수 있으므로 다른 absence bag을 몇 번이나 뽑아볼 것인지 지정하는 인자
 
-testsize: 아는대로
+`repnum`: 하나의 bag 안에서 몇번이나 머신러닝을 반복할 것인지 지정하는 인자
 
-learningrate: 아는대로
+`testsize`: 머신러닝 test size
 
-returnsize: return할때 샤프밸류 몇위까지 내보내줄까를 설정하는 인자
+`learningrate`: 머신러닝 learningrate
 
-viewoption: 머신러닝 한번 돌때마다 결과를 볼것인지
+`returnsize`: shap value 가 높은 순으로 정렬되는데, 높은 순서대로 몇번째까지 return할지 정해주는 인자.
 
-to_csv: csv파일로 지정된 경로로 저장할 것인지.
+`viewoption`: TRUE이면 매 머신러닝마다 그 결과를 볼 수 있음
 
-return 샤프밸류가 높은 순서대로 returnsize로 설정한 순위까지 잘려서 종이름이 list로 반환됨
+`to_csv`: TRUE이면 결과 값들을 지정된 경로에 csv로 저장함
+
+`return`: 샤프밸류가 높은 순서대로 returnsize로 설정한 순위까지 잘려서 종이름이 list로 반환됨
 
 ## 7. AOO
 
@@ -200,30 +255,32 @@ return 샤프밸류가 높은 순서대로 returnsize로 설정한 순위까지 
 
 5_make_AOOcsv.ipynb 파일을 참고하는 것이 좋을 것입니다.
 
-df_train: aoo를 계산하려고하는종의 train 데이터
+`df_train`: aoo를 계산하려고하는종의 학습용 데이터
 
-df_test: aoo를 계산하려고하는 종의 test 데이터
+`df_test`: aoo를 계산하려고하는 종의 테스트 데이터
 
-targetnum: aoo를 계산하려고 하는 종의 개수
+`targetnum`: aoo를 계산하려고 하는 종의 개수
 
-varlist: 모델에 사용될 변수 종들의 목록 (list형식으로 넣어야함)
+`varlist`: 모델에 사용될 변수 종들의 list
 
-year_start : AOO조사를 시작할 연도
+`year_start `: AOO조사를 시작할 연도
 
-year_end ; AOO조사를 끝낼 연도
+`year_end `: AOO조사를 끝낼 연도
 
-to_csv: csv파일로 지정된 경로로 저장할 것인지.
+`to_csv`: TRUE이면 결과 값들을 지정된 경로에 csv로 저장함
 
-bagnum : presence보다 absence가 많으므로 비율을 맞춰줘야하는데, absence를 일부분만 뽑게됨. 데이터의 편향이 있을 수 있으므로, 다른 absence도 뽑아보는 방식으로 결정됨. 여기서 이 백을 몇번을 뽑아볼 것인지 지정하는 것
+`bagnum` : presence보다 absence가 많으므로 비율을 맞춰주기 위해서, absence를 일부분만 뽑게됨.
 
-repnum: 뽑아본 bag 안에서 몇번이나 머신러닝을 반복할 것인지
+ 데이터의 편향이 있을 수 있으므로 다른 absence bag을 몇 번이나 뽑아볼 것인지 지정하는 인자
 
-learningrate: 아는대로
+`repnum`: 하나의 bag 안에서 몇번이나 머신러닝을 반복할 것인지 지정하는 인자
 
-judge_indicator: bag과 rep을 곱한것이 전체, 그중에서 몇퍼센트를 차지해야 있다로 볼것인지.
+`learningrate`: 머신러닝 learningrate
 
-0.5면 절반 이상 있는 것으로 예측했을때, 있다고 보는것.
+`judge_indicato`r: bag과 rep을 곱한것이 전체, 그중에서 몇퍼센트를 차지해야 있다로 볼것인지를 결정합니다.
 
-to_csv: csv파일을 지정된 경로로 저장할 것인지.
+예를들어 이 인자의 값이 0.5면 절반 이상 있는 것으로 예측했을때 그곳에는 타겟종이 존재한다고 보는것입니다.
 
-return: 없음. 지정된 경로로 aoo_crawling 파일을 위한 csv가 저장됨
+`to_csv`: TRUE이면 결과 값들을 지정된 경로에 csv로 저장함
+
+`return`: 없음. 지정된 경로로 aoo_crawling 파일을 위한 csv가 저장됨
