@@ -50,8 +50,5 @@ def make_train(df_all,df_target,target_species):
         
     df_fin = df_fin.reset_index(drop=True)
     
-    # If it cannot be a pseudo absence area, drop it
-    df_fin = df_fin.drop(df_fin[(df_fin[target_species + str('_18')]!=0)
-                                        &(df_fin['Species']!= target_species)].index).reset_index(drop=True)
     
     return df_fin
