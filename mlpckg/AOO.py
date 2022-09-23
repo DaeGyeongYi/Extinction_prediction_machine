@@ -58,7 +58,7 @@ def AOO(df_train,df_test,targetnum,varlist,target_species,Year_start,Year_end,ba
 
                 df09.columns = list(nameind.values())
                 preds_proba = xgb_wrapper.predict_proba(df09)
-                presence_index = [i for i in range(len(preds_proba)) if preds_proba[i][1]>0.5]
+                presence_index = [p for p in range(len(preds_proba)) if preds_proba[p][1]>0.5]
 
                 
                 globals()["potcast_{}".format(year)].extend(presence_index)
