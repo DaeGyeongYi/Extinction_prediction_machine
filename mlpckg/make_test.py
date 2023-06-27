@@ -47,7 +47,7 @@ def make_test(df_all,df_target,Year_Start:int, Year_end:int):
         for j in range(Year_Start,Year_end):
             for name in Species_List:
                 for k in range(len(globals()['{}_{}df'.format(name.split(" ")[1],j)])):
-                    if haversine(globals()['{}_{}df'.format(name.split(" ")[1],j)].gps[k], df_target.gps[i], unit='km') <= 18:
+                    if haversine(globals()['{}_{}df'.format(name.split(" ")[1],j)].gps[k], df_target.gps[i], unit='km') <= 18: ################## 18로 바꿔야함
                         globals()['{}_{}_{}'.format(name.split(" ")[1],j,i)] += 1
 
     # 종, 연도에 따라 리스트에 변수들 append
